@@ -1,0 +1,29 @@
+pipeline {
+    agent any
+
+    stages {
+        stage('Instalar dependencias') {
+            steps {
+                sh 'python3 -m pip install -r app/requirements.txt'
+            }
+        }
+
+        stage('Pruebas unitarias') {
+            steps {
+                sh 'python3 -m pytest app/tests/'
+            }
+        }
+
+        stage('Terraform Format') {
+            steps {
+                sh 'cd terraform && terraform fmt -check'
+            }
+        }
+
+        stage('Terraform Validate') {
+            steps {
+                sh 'cd terraform && terraform init -backend=false && terraform validate'
+            }
+        }
+    }
+}

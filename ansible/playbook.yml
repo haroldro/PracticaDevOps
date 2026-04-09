@@ -1,0 +1,38 @@
+- name: Desplegar aplicación Flask
+  hosts: web
+  become: yes
+
+  tasks:
+    - name: Actualizar paquetes
+      apt:
+        update_cache: yes
+      when: ansible_os_family == "Debian"
+
+    - name: Instalar Python3 y pip
+      package:
+        name:
+          - python3
+          - python3-pip
+        state: present
+
+    - name: Crear directorio de la aplicación
+      file:
+        path: /opt/flask-app
+        state: directory
+        mode: '0755'
+
+    - name: Copiar aplicación
+      copy:
+        src: ../app/
+        dest: /opt/flask-app/
+
+    - name: Instalar dependencias
+      pip:
+        requirements: /opt/flask-app/requirements.txt
+        executable: pip3
+
+    - name: Ejecutar aplicación Flask
+      shell: |
+        nohup python3 /opt/flask-app/main.py > /opt/flask-app/app.log 2>&1 &
+      args:
+        executable: /bin/bash

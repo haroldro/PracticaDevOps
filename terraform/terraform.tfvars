@@ -1,0 +1,6 @@
+aws_region     = "us-east-1"
+aws_access_key = "TU_ACCESS_KEY"
+aws_secret_key = "TU_SECRET_KEY"
+instance_type  = "t2.micro"
+key_name       = "mi-keypair"
+ami_id         = "ami-0c02fb55956c7d316"
